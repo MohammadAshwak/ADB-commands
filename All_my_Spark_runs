@@ -1,0 +1,349 @@
+from itertools import groupby
+from sre_parse import State
+
+from pyspark import SparkConf
+from pyspark import SparkContext
+from pyspark.sql import SparkSession
+import sys
+import os
+from collections import namedtuple
+from pyspark.sql.functions import *
+from pyspark.sql.types import *
+
+python_path = sys.executable
+os.environ['PYSPARK_PYTHON'] = python_path
+os.environ['JAVA_HOME'] = r'C:\Users\amohammad\.jdks\ms-17.0.17'
+os.environ['HADOOP_HOME'] = "hadoop"
+conf = SparkConf().setAppName("pyspark").setMaster("local[*]").set("spark.driver.host","localhost")
+sc = SparkContext(conf=conf)
+
+spark = SparkSession.builder.getOrCreate()
+
+#spark.read.format("csv").load("data/test.txt").toDF("Success").show(20,False)
+
+
+#data = [
+#    (0, "06-26-2011", 300.4, "Exercise", "GymnasticsPro", "cash"),
+#    (1, "05-26-2011", 200.0, "Exercise Band", "Weightlifting", "credit"),
+#    (2, "06-01-2011", 300.4, "Exercise", "Gymnastics Pro", "cash"),
+ #   (3, "06-05-2011", 100.0, "Gymnastics", "Rings", "credit"),
+#    (4, "12-17-2011", 300.0, "Team Sports", "Field", "cash"),
+ #   (5, "02-14-2011", 200.0, "Gymnastics", None, "cash"),
+ #   (6, "06-05-2011", 100.0, "Exercise", "Rings", "credit"),
+  #  (7, "12-17-2011", 300.0, "Team Sports", "Field", "cash"),
+   # (8, "02-14-2011", 200.0, "Gymnastics", None, "cash")
+#]
+
+#table = spark.createDataFrame(data, ["id", "tdate", "amount", "category", "product", "spendby"])
+#table.show()
+
+
+#likef= table.filter("category= 'Exercise'")
+#likef.show()
+
+#kilef=table.filter("category!= 'Exercise'").show()
+
+#litef=table.filter("category in('Exercise','Team Sports')").show()
+
+#lihet=table.filter("product like('%Gymnastics%')").show()
+
+#nulef=table.filter("product is NULL").show()
+
+#lithgf= table.filter("category= 'Exercise' and spendby= 'cash'").show()
+
+#lsdhgf= table.filter("category= 'Exercise' and spendby= 'credit'").show()
+
+#askd=table.filter("category='Exercise' or spendby= 'cash'").show()
+
+
+#sajfdg=table.filter("product is not null and spendby= 'cash'").show()
+
+#adhf = table.union(table)
+#adhf.show()
+
+#dfcates = adhf.dropDuplicates(["id"])
+#dfcates.show()
+
+#adhf=table.union(table)
+#adhf.show()
+#dfcates = adhf.dropDuplicates(["category"])
+#dfcates.show()
+#ghfh=table.filter(table.id > 5)
+#ghfh.count()
+#ghfh.show()
+
+#ghgfh = table.filter(col("id") > 2)
+
+#rows = ghgfh.limit(5).collect()
+#for row in rows:
+ #   print(row)
+
+
+#frnds=table.groupBy("category").sum("amount")
+#frnds.show()
+#ln=[50,60,49,90]
+#print(ln)
+
+#rddln=sc.parallelize(ln)
+#print(rddln.collect())
+
+#labln= rddln.map(lambda x:x+50)
+#print(labln.collect())
+
+#flrdd=labln.filter(lambda x:x>70)
+#print(flrdd.collect())
+
+#strj=["zeyo","flat","klitezeyo"]
+#print(strj)
+#print()
+#fgh=sc.parallelize(strj)
+#print(fgh.collect())
+#print()
+#ghtk=fgh.map(lambda x:x.replace("zeyo","pasha"))
+#(ghtk.collect())
+#print()
+#hjk=fgh.filter(lambda x:'zeyo' in x)
+#print(hjk.collect())
+#print()
+#hjjkk=fgh.filter(lambda x:'zeyo' in x.lower())
+#print(hjjkk.collect())
+#hf=["A~B","C~D"]
+#print(hf)
+#print("Raw data")
+#dft=sc.parallelize(hf)
+#print(dft.collect())
+#print("RDD data")
+#print()
+#fhg=dft.map(lambda x:x.split("~"))
+#print(fhg.collect())
+#print()
+#trh=dft.flatMap(lambda x:x.split("~"))
+#print(trh.collect())
+
+#pliu=["State->TN~~City->Chennai","State->UP~~City->Lucknow"]
+#loui=sc.parallelize(pliu)
+#print(loui.collect())
+#print("RDD data")
+#print()
+#yuil=loui.flatMap(lambda x:x.split("~~"))
+#print(yuil.collect())
+#ruil=yuil.filter(lambda x:"State->" in x)
+#print(ruil.collect())
+#tuil=yuil.filter(lambda y:"City->" in y)
+#print(tuil.collect())
+#puil=ruil.map(lambda x:x.replace("State->",""))
+#print(puil.collect())
+#kuil=tuil.map(lambda x:x.replace("City->",""))
+#print(kuil.collect())
+#juil= puil + kuil
+#print(juil.collect())
+'''
+Data = [(1, 'Alice', 25, 'F'),
+        (2, 'Bob', 40, 'M'),
+        (3, 'Raj', 46, 'M'),
+        (4, 'Sekar', 66, 'M'),
+        (5, 'Jhon', 47, 'M'),
+        (6, 'Timoty', 28, 'M'),
+        (7, 'Brad', 90, 'M'),
+        (8, 'Rita', 34, 'F')]
+
+table= spark.createDataFrame(Data, ["id","name","Age","Gender"])
+table.show()
+
+#tabla = table.withColumn("Age_gt_40", col("Age") > 40)
+
+#tabla.show()
+
+#tabla = table.withColumn("age_above_40", col("Age") > 40)
+#tabla.show()
+
+#tabla = table.filter(col("Age") > 40)
+#tabla.show()
+'''
+'''
+tabla = table.filter(col("Age").between(36, 50))
+tabla.show()
+
+tatla = table.filter(col("Age").between(19, 35))
+tatla.show()
+
+Ratla = table.filter(col("Age")>50)
+Ratla.show()
+
+gubled= tabla.union(tatla).union(Ratla)
+gubled.show()
+
+hklui= gubled.withColumn("age group", when(col("Age").between(36,50),"36-50").when(col("Age").between(19,35),"19-35").when(col("Age")>50,"50+"))
+
+hklui.show()
+
+grpdy=hklui.groupby("age group").count().show()
+'''
+###----------------------------------------------------------------------
+'''
+groupdf = table.withColumn(
+    "age_group",
+    expr(
+        "case when age between 19 and 35 then '19-35' " +
+        "when age between 36 and 50 then '36-50' " +
+        "when age > 51 then '51+' " +
+        "else 'Other' end"
+    )
+)
+groupdf.show()
+
+finaldf = groupdf.groupBy('age_group').agg(count('*').alias('count'))
+finaldf.show()
+'''
+#-------------------------------------------------------------------------------------
+#age_group_df = table.withColumn(
+ #   "age_group",
+  #  when(col("Age").between(19, 35), "19-35")
+   # .when(col("Age").between(36, 50), "36-50")
+    #.when(col("Age") > 50, "50+")
+#)
+
+#age_group_df.show()
+
+#result = age_group_df.groupBy("age_group").count()
+#result.show()
+
+
+#tabla = table.filter("Age BETWEEN 40 AND 50")
+#tabla.show()
+#_________________________________________________________________________________--
+'''
+af= [(1, 'Veg Biryani'),
+     (2, 'Veg Fried Rice'),
+     (3, 'Kaju Fried Rice'),
+     (4, 'Chicken Biryani'),
+     (5, 'Chicken Dum Biryani'),
+     (6, 'Prawns Biryani'),
+     (7, 'Fish Birayani')]
+
+Food = spark.createDataFrame(af,["Food_id","food_item"])
+Food.createOrReplaceTempView("Food")
+Food.show()
+
+
+bf= [(1, 5),
+     (2, 3),
+     (3, 4),
+     (4, 4),
+     (5, 5),
+     (6, 4),
+     (7, 4)]
+
+Eat = spark.createDataFrame(bf,["Food_id","rating"])
+Eat.createOrReplaceTempView("Eat")
+Eat.show()
+
+joiundf = spark.sql("Select a.*,b.rating from Food a left join Eat b on a.Food_id = b.Food_id")
+joiundf.show()
+
+stark= joiundf.withColumn("stars",expr("repeat('*',rating)"))
+stark.show()
+
+ratinng= joindf.withColumn("rating_food", expr("repeat('*',rating)"))
+ratinng.show()
+
+joindf= Food.join(Eat,"Food_id", "left")
+joindf.show()
+'''
+'''
+gd=[(1, 60000, 2018),
+    (1, 70000, 2019),
+    (1, 80000, 2020),
+    (2, 60000, 2018),
+    (2, 65000, 2019),
+    (2, 65000, 2020),
+    (3, 60000, 2018),
+    (3, 65000, 2019)]
+grade=spark.createDataFrame(gd,["emp_id","salary","year"])
+grade.createOrReplaceTempView("grade")
+grade.show()
+
+
+pdasa= spark.sql("select emp_id,salary,year, salary - LAG(salary, 1, salary) OVER (PARTITION BY emp_id ORDER BY year) AS incresalary FROM grade ORDER BY emp_id, year")
+pdasa.show()
+
+'''
+'''
+tg=[(1, 'home'),
+    (1, 'products'),
+    (1, 'checkout'),
+    (1, 'confirmation'),
+    (2, 'home'),
+    (2, 'products'),
+    (2, 'cart'),
+    (2, 'checkout'),
+    (2, 'confirmation'),
+    (2, 'home'),
+    (2, 'products')]
+
+toped=spark.createDataFrame(tg,["id","page"])
+toped.createOrReplaceTempView("toped")
+toped.show()
+
+goped=toped.groupby("id").agg(collect_set("page")).show()
+'''
+''''
+df = spark.read.format("csv").option("header", "true").option("mode", "DROPMALFORMED").load("D:/BigData/Datasets/Scenerio25.csv")
+df.show()
+'''
+'''''
+yata= [(1,"manoj"),(2,"karthik"),(3,"gauth"),(4,"mansa"),(5,"mandep")]
+yata=spark.createDataFrame(yata,["id","username"])
+yata.createOrReplaceTempView("yata")
+yata.show()
+tapa=spark.sql("select * from yata where username like '%m'")
+tapa.show()
+'''''
+#datafrm= spark.read.format("csv").option("header","true").load("sample.csv")
+#datafrm.show()
+#datafrm.write.format("parquet").mode("overwrite").save("parquetdata")
+
+
+'''''
+
+table=[(1, 100, 2010, 25, 5000),
+       (2, 100, 2011, 16, 5000),
+       (3, 100, 2012, 8, 5000),
+       (4, 200, 2010, 10, 9000),
+       (5, 200, 2011, 15, 9000),
+       (6, 200, 2012, 20, 7000),
+       (7, 300, 2010, 20, 7000),
+       (8, 300, 2011, 18, 7000),
+       (9, 300, 2012, 20, 7000)]
+table=spark.createDataFrame(table,("sale_id", "product_id", "year", "quantity", "price"))
+table.createOrReplaceTempView("table")
+table.show()
+#Brand=table.filter("sale_id > 6")
+#Brand=table.withColumn("sale_id", expr("sale_id > 6"))
+#Brand.show()
+tea = table.groupBy("year") \
+    .agg((sum("quantity").alias("total_quantity")),(sum("product_id").alias("total_product")),(sum("price").alias("total_price"))) \
+    .orderBy("total_quantity","total_price","total_product")
+tea.show()
+'''''
+'''''
+csvdata=[("May",  0.1,  0,  0, 1, 1, 0, 0, 0, 2, 0,  0,  0),
+         ("Jun",  0.5,  2,  1, 1, 0, 0, 1, 1, 2, 2,  0,  1),
+         ("Jul",  0.7,  5,  1, 1, 2, 0, 1, 3, 0, 2,  2,  1),
+         ("Aug",  2.3,  6,  3, 2, 4, 4, 4, 7, 8, 2,  2,  3),
+         ("Sep",  3.5,  6,  4, 7, 4, 2, 8, 5, 2, 5,  2,  5),
+         ("Oct",  2.0,  8,  0, 1, 3, 2, 5, 1, 5, 2,  3,  0),
+         ("Nov",  0.5,  3,  0, 0, 1, 1, 0, 1, 0, 1,  0,  1),
+         ("Dec",  0.0,  1,  0, 1, 0, 0, 0, 0, 0, 0,  0,  1)]
+csvdata=spark.createDataFrame(csvdata, ("Month", "Average", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015"))
+csvdata.createOrReplaceTempView("csvdata")
+csvdata.show()
+csvdata.printSchema()
+'''''
+''''
+df=spark.read.format("csv").option("header","true").load("sample.csv")
+df.show()
+df.printSchema()
+df.write.format("parquet").mode("overwrite").save("guparquet")
+print("execution done")
+''''
